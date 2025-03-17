@@ -11,8 +11,8 @@ public class CategoriesDataAccess : ICategoriesDataAccess
     public CategoriesDataAccess(IConfiguration configuration)
     {
         string namedb = "DefaultConnection";
-        _connectionString = configuration.GetConnectionString(namedb) ??
-            throw new Exception($"ConnectionString '{namedb}' not found.");
+        _connectionString = configuration.GetConnectionString(namedb)
+            ?? throw new Exception($"ConnectionString '{namedb}' not found.");
     }
 
     // METODI C-R-U-D
@@ -36,6 +36,7 @@ public class CategoriesDataAccess : ICategoriesDataAccess
             throw new Exception($"Si è verificato un errore in {nameof(GetCategories)}");
         }
     }
+    
     public Category? GetCategory(int id)
     {
         try
@@ -57,6 +58,7 @@ public class CategoriesDataAccess : ICategoriesDataAccess
             throw new Exception($"Si è verificato un errore in {nameof(GetCategory)}");
         }
     }
+    
     public int AddCategory(Category category)
     {
         try
@@ -78,6 +80,7 @@ public class CategoriesDataAccess : ICategoriesDataAccess
             throw new Exception($"Si è verificato un errore in {nameof(AddCategory)}");
         }
     }
+    
     public bool UpdateCategory(Category category)
     {
         try
@@ -99,6 +102,7 @@ public class CategoriesDataAccess : ICategoriesDataAccess
             throw new Exception($"Si è verificato un errore in {nameof(UpdateCategory)}");
         }
     }
+    
     public bool DeleteCategory(int id)
     {
         try

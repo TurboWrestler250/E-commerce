@@ -1,0 +1,29 @@
+﻿@page "/admin/products/delete/{id:int}"
+@inject IProductsDataAccess productsDataAccess
+@inject NavigationManager NavigationManager
+
+<h3>DeleteProduct</h3>
+
+
+<p>Sei sicuro di voler eliminare il prodotto @_product.Title?</p>
+<a class="btn btn-secondary" href="/admin/categories">Annulla</a>
+<button type="button" class="btn btn-danger" @onclick="OnDelete">Elimina</button>
+
+
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+	private Product _product;
+
+	private void OnDelete()
+	{
+		productsDataAccess.DeleteProduct(Id);
+		NavigationManager.NavigateTo("/admin/products");
+	}
+
+	protected override void OnInitialized()
+	{
+		_product = productsDataAccess.GetProduct(Id);
+	}
+}

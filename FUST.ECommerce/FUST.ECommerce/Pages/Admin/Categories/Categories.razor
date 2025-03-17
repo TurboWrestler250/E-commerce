@@ -1,0 +1,89 @@
+﻿@page "/admin/categories"
+
+@* @inject ICategoriesService CategoriesService *@
+
+<PageTitle>Gestione Categorie</PageTitle>
+
+<div style="display:flex">
+	<h3>Categorie</h3>
+
+	<!-- Pulsante per aggiornare la tabella -->
+	<button class="btn btn-primary mb-3" @onclick="RefreshCategories" style="margin-left:20px">
+		<i class="bi bi-arrow-clockwise"></i> Aggiorna
+	</button>
+</div>
+
+<!-- Form per inserire un record nella database -->
+<div class="container mt-2">
+	<div class="card shadow-lg p-4">
+		<EditForm Model="this" OnValidSubmit="@SaveCategory">
+			<DataAnnotationsValidator />
+			<ValidationSummary />
+
+			<div class="mb-3">
+				<label for="nomeCategoria" class="form-label">Nome Categoria</label>
+				<InputText id="nomeCategoria" class="form-control" placeholder="Enter the name..." @bind-Value="_input.Name" />
+				<ValidationMessage For="@(() => _input.Name)" class="text-danger" />
+			</div>
+
+			<div class="d-flex justify-content-center">
+				<button type="submit" class="btn btn-success w-50">
+					<i class="bi bi-save"></i> Salva
+				</button>
+			</div>
+		</EditForm>
+	</div>
+</div>
+
+<!--Lista delle categorie -->
+@if(_categories is null)
+{
+	<p>Loading...</p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+		@foreach (var p in _categories)
+		{
+			<tr>
+				<td>@p.Id</td>
+				<td>@p.Name</td>
+				<td><a href="/admin/categories/edit/@p.Id">EDIT</a></td>
+				<td><a href="/admin/categories/delete/@p.Id">DELETE</a></td>
+			</tr>
+		}
+		</tbody>
+	</table>
+
+	<!-- MODAL POPUP DI CONFERMA -->
+	@if (showPopup)
+	{
+		<div class="modal fade show d-block" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Operazione completata</h5>
+					</div>
+					<div class="modal-body">
+						<p>@popupMessage</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" @onclick="ClosePopup">OK</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Overlay scuro per il popup -->
+		<div class="modal-backdrop fade show"></div>
+	}
+}

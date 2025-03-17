@@ -1,0 +1,22 @@
+﻿@page "/admin/categories/delete/{id:int}"
+@inject ICategoriesDataAccess categoriesDataAccess
+@inject NavigationManager NavigationManager
+
+<h3>DeleteCategory</h3>
+
+
+<p>Sei sicuro di voler eliminare la categoria?</p>
+<a class="btn btn-secondary" href="/admin/categories">Annulla</a>
+<button type="button" class="btn btn-danger" @onclick="OnDelete">Elimina</button>
+
+
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+	private void OnDelete()
+	{
+		categoriesDataAccess.DeleteCategory(Id);
+		NavigationManager.NavigateTo("/admin/categories");
+	}
+}

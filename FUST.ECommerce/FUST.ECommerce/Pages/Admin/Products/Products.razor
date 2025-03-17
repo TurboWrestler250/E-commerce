@@ -1,0 +1,102 @@
+﻿@page "/admin/products"
+
+@* @inject ICategoriesService CategoriesService *@
+
+<PageTitle>Gestione dei Prodotti</PageTitle>
+
+<div style="display:flex">
+	<h3>Prodotti</h3>
+
+	<!-- Pulsante per aggiornare la tabella -->
+	<button class="btn btn-primary mb-3" @onclick="RefreshProducts" style="margin-left:20px">
+		<i class="bi bi-arrow-clockwise"></i> Aggiorna
+	</button>
+</div>
+
+<!-- Form per inserire un record nella database -->
+<div class="container mt-2">
+	<div class="card shadow-lg p-4">
+		<EditForm Model="_input" OnValidSubmit="@SaveProduct">
+			<DataAnnotationsValidator />
+			<ValidationSummary />
+
+			<div class="mb-3">
+				<label for="title" class="form-label">Titolo del prodotto</label>
+				<InputText id="title" class="form-control" placeholder="Enter the title..." @bind-Value="_input.Title" />
+				<ValidationMessage For="@(() => _input.Title)" class="text-danger" />
+			</div>
+			<div class="mb-3">
+				<label for="description" class="form-label">Descrizione del prodotto</label>
+				<InputText id="description" class="form-control" placeholder="Enter the description..." @bind-Value="_input.Description" />
+				<ValidationMessage For="@(() => _input.Description)" class="text-danger" />
+			</div>
+			<div class="mb-3">
+				<label for="categoryId" class="form-label">ID Categoria</label>
+				<InputNumber id="categoryId" class="form-control" placeholder="Enter the ID category..." @bind-Value="_input.CategoryId" />
+				<ValidationMessage For="@(() => _input.CategoryId)" class="text-danger" />
+			</div>
+
+
+			<div class="d-flex justify-content-center">
+				<button type="submit" class="btn btn-success w-50">
+					<i class="bi bi-save"></i> Salva
+				</button>
+			</div>
+		</EditForm>
+	</div>
+</div>
+
+@if(_products is null)
+{
+	<p>Loading...</p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Title</th>
+				<th>Description</th>
+				<th>CategoryId</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+	@foreach (var p in _products)
+	{
+			<tr>
+				<td>@p.Id</td>
+				<td>@p.Title</td>
+				<td>@p.Description</td>
+				<td>@p.CategoryId</td>
+				<td><a href="/admin/products/edit/@p.Id">EDIT</a></td>
+				<td><a href="/admin/products/delete/@p.Id">DELETE</a></td>
+			</tr>
+	}
+		</tbody>
+	</table>
+
+	<!-- MODAL POPUP DI CONFERMA -->
+	@if (showPopup)
+	{
+		<div class="modal fade show d-block" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Operazione completata</h5>
+					</div>
+					<div class="modal-body">
+						<p>@popupMessage</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" @onclick="ClosePopup">OK</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Overlay scuro per il popup -->
+		<div class="modal-backdrop fade show"></div>
+	}
+}

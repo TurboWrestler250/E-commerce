@@ -1,13 +1,13 @@
-﻿namespace FUST.ECommerce.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FUST.ECommerce.Models;
 
 public class Product
 {
     public int Id { get; set; }
+    [Required(ErrorMessage = "Il titolo è obbligatorio")]
+    [StringLength(50, ErrorMessage = "Il titolo può essere lungo massimo 50 caratteri")]
     public string Title { get; set; } = "";
     public string Description { get; set; } = "";
-    public int CategoryId { get; set; }
-    public string UserId { get; set; } = "";
-    public bool Completed { get; set; }
-    public DateTime CreateDate { get; set; }
-    public DateTime CompletedDate { get; set; }
+    public int? CategoryId { get; set; }
 }

@@ -1,13 +1,12 @@
-﻿using FUST.ECommerce.Models;
+﻿namespace FUST.ECommerce.Services;
 
-namespace FUST.ECommerce.Services
+using FUST.ECommerce.Models;
+
+public interface IProductsDataAccess
 {
-    public interface IProductsDataAccess
-    {
-        IEnumerable<Product> GetProducts();
-        Product? GetProduct(int id);
-        int AddProduct(Product product);
-        bool UpdateProduct(Product product);
-        bool DeleteProduct(int id);
-    }
+    IEnumerable<Product> GetProducts();
+    Product? GetProduct(int id);
+    int AddProduct(Product product);
+    bool UpdateProduct(Product product);
+    bool DeleteProduct(int id);
 }

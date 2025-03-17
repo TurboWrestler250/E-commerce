@@ -15,13 +15,14 @@ public class ProductsDataAccess : IProductsDataAccess
             ?? throw new Exception($"ConnectionString '{namedb}' not found.");
     }
 
+    // METODI C-R-U-D
     public IEnumerable<Product> GetProducts()
     {
         try
         {
             using var connection = new MySqlConnection(_connectionString);
             const string query = """
-                SELECT productNumber as id, productName, country, creditLimit
+                SELECT Id, Title, Description, CategoryId
                 FROM products
                 """;
             return connection.Query<Product>(query);
@@ -42,7 +43,7 @@ public class ProductsDataAccess : IProductsDataAccess
         {
             using var connection = new MySqlConnection(_connectionString);
             const string query = """
-                SELECT Id, Title, Description, CategoryId, UserId, Completed, CreateDate, CompletedDate
+                SELECT Id, Title, Description, CategoryId
                 FROM products
                 WHERE Id = @Id;
                 """;
@@ -64,8 +65,8 @@ public class ProductsDataAccess : IProductsDataAccess
         {
             using var connection = new MySqlConnection(_connectionString);
             const string query = """
-                INSERT INTO products (Title, Description, CategoryId, UserId, Completed, CompletedDate)
-                VALUES (@Title, @Description, @CategoryId, @UserId, @Completed, @CompletedDate);
+                INSERT INTO products (Title, Description, CategoryId)
+                VALUES (@Title, @Description, @CategoryId);
                 SELECT LAST_INSERT_ID() as last_id;
                 """;
             return connection.ExecuteScalar<int>(query, product);
@@ -87,7 +88,7 @@ public class ProductsDataAccess : IProductsDataAccess
             using var connection = new MySqlConnection(_connectionString);
             const string query = """
                 UPDATE products
-                SET Title = @Title, Description = @Description, CategoryId = @CategoryId, UserId = @UserId, Completed = @Completed, CompletedDate = @CompletedDate
+                SET Title = @Title, Description = @Description, CategoryId = @CategoryId
                 WHERE Id = @Id;
                 """;
             return connection.Execute(query, product) > 0;
